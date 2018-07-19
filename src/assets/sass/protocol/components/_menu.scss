@@ -1,0 +1,445 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+@import '../includes/lib';
+
+@mixin menu-arrow {
+    // menu panel arrow.
+    &:after {
+        @include animation(mzp-a-fade-in 70ms ease-in 150ms 1 normal both);
+        background: transparent url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMTkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0iI0ZGRiIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTYgMS40MTRMMi40MTQgMTVoMjcuMTcyTDE2IDEuNDE0eiIgc3Ryb2tlPSIjQ0VDRUNFIiBzdHJva2Utd2lkdGg9IjIiLz48cGF0aCBkPSJNMTYgM2wxNiAxNkgweiIvPjwvZz48L3N2Zz4=') center center no-repeat;
+        bottom: -20px;
+        content: '';
+        height: 19px;
+        left: 50%;
+        margin-left: -16px;
+        position: absolute;
+        width: 32px;
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+// Menu top navigation
+
+.mzp-c-menu {
+
+    h1, h2, h3, h4, h5, h6 {
+        @include open-sans;
+    }
+
+    @media #{$mq-md} {
+        z-index: 0;
+    }
+}
+
+.mzp-c-menu-category-list {
+    margin-bottom: $margin-lg;
+
+    @media #{$mq-md} {
+        @include clearfix;
+        margin-bottom: 0;
+    }
+}
+
+.mzp-c-menu-category {
+
+    .mzp-c-menu-title {
+        @include open-sans;
+        @include text-body-md;
+        border-bottom: 1px solid $color-gray-30;
+        color: $color-black;
+        cursor: default;
+        display: block;
+        font-weight: normal;
+        margin-bottom: 0;
+        min-height: 40px;
+        padding: $padding-sm 0;
+        position: relative;
+        text-decoration: none;
+
+        &:link:active {
+            background: none;
+        }
+
+        &:before {
+            background: url('#{$image-path}/icons/ui/expand-black.svg') top left no-repeat;
+            @include background-size(16px, 16px);
+            content: '';
+            height: 16px;
+            margin-top: -8px;
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transition: transform .2s ease-in-out;
+            width: 16px;
+        }
+    }
+
+    @supports(display: flex) {
+        .mzp-c-menu-title {
+            align-items: center;
+            display: flex;
+        }
+    }
+
+    @media #{$mq-md} {
+        display: inline-block;
+        float: left;
+
+        .mzp-c-menu-title {
+            padding: $padding-lg $padding-sm;
+            border-bottom: none;
+
+            &:before {
+                content: none;
+            }
+        }
+    }
+
+    @media #{$mq-lg} {
+        .mzp-c-menu-title {
+            padding: $padding-lg $padding-md;
+        }
+    }
+
+    @media #{$mq-xl} {
+        .mzp-c-menu-title {
+            padding: $padding-lg;
+        }
+    }
+}
+
+.no-js .mzp-c-menu-category,
+.mzp-c-menu-basic .mzp-c-menu-category {
+    @media #{$mq-md} {
+        &:hover,
+        &:focus {
+            .mzp-c-menu-title {
+                @include menu-arrow;
+                z-index: 101;
+            }
+
+            .mzp-c-menu-panel {
+                display: block;
+                z-index: 100;
+            }
+        }
+
+        &:focus-within {
+            .mzp-c-menu-title {
+                @include menu-arrow;
+                z-index: 101;
+            }
+
+            .mzp-c-menu-panel {
+                display: block;
+                z-index: 100;
+            }
+        }
+    }
+}
+
+.mzp-c-menu-category {
+    &.selected {
+        .mzp-c-menu-title:before {
+            transform: rotate(45deg);
+        }
+        .mzp-c-menu-panel {
+            display: block;
+        }
+    }
+
+    @media #{$mq-md} {
+        &.selected {
+            .mzp-c-menu-title {
+                @include menu-arrow;
+                z-index: 101;
+            }
+
+            .mzp-c-menu-panel {
+                display: block;
+                z-index: 100;
+            }
+        }
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+// Menu panel
+
+.mzp-c-menu-panel {
+    @include border-box;
+    @include clearfix;
+    background: $color-white;
+    display: none;
+    width: 100%;
+    padding-top: $padding-lg;
+
+    // Close button is only vivible for large screens.
+    .mzp-c-menu-button-close {
+        @include image-replaced;
+        background: transparent url('#{$image-path}/icons/ui/close-black.svg') center center no-repeat;
+        border: none;
+        display: none;
+        height: 16px;
+        padding: 0;
+        position: absolute;
+        right: 0;
+        top: -$spacing-sm;
+        width: 16px;
+
+        &:hover,
+        &:focus {
+            @include transition(transform .1s ease-in-out);
+            @include transform(scale(1.1));
+        }
+    }
+
+    // Cards are hidden by default on small screens.
+    &.mzp-has-card .mzp-c-menu-panel-card {
+        display: none;
+        width: 300px;
+    }
+
+    @media #{$mq-md} {
+        @include animation(mzp-a-fade-in 70ms ease-in 150ms 1 normal both);
+        border-radius: 8px;
+        border: 2px solid $color-gray-30;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, .5);
+        left: 0;
+        margin-top: $margin-md;
+        padding: $padding-lg;
+        position: absolute;
+
+        /**
+         * Pseudo element overlayed across the small gap between
+         * the menu and panel prevents menu closing when changing
+         * hover position.
+         */
+        &:before {
+            top: -20px;
+            content: '';
+            height: 20px;
+            left: 0;
+            position: absolute;
+            width: 100%;
+        }
+
+        .mzp-c-menu-panel-container {
+            position: relative;
+            padding-top: $padding-md;
+        }
+
+        .mzp-c-menu-button-close {
+            display: block;
+        }
+
+        .mzp-c-menu-panel-content {
+            @include clearfix;
+            position: relative;
+
+            &> ul {
+                width: calc(50% - (#{$margin-lg} / 2));
+                float: left;
+
+                &:first-child {
+                    margin-right: $margin-lg / 2;
+                }
+
+                &:last-child {
+                    margin-left: $margin-lg / 2;
+                }
+            }
+        }
+    }
+
+    @media #{$mq-xl} {
+        padding: $padding-xl;
+
+        .mzp-c-menu-button-close {
+            top: -$spacing-md;
+        }
+
+        &.mzp-has-card {
+            .mzp-c-menu-panel-content {
+                float: left;
+                width: calc(100% - (300px + #{$margin-lg}));
+            }
+
+            .mzp-c-menu-panel-card {
+                float: right;
+                display: block;
+            }
+        }
+    }
+}
+
+.no-js .mzp-c-menu-panel,
+.mzp-c-menu-basic .mzp-c-menu-panel {
+    display: block;
+
+    @media #{$mq-md} {
+        display: none;
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+// Menu items
+
+$small-icon-size: 32px;
+$large-icon-size: 64px;
+
+.mzp-c-menu-item {
+    border-radius: 2px;
+    margin-bottom: $margin-lg;
+
+    .mzp-c-menu-item-link {
+        display: block;
+
+        &:link,
+        &:visited {
+            color: $color-black;
+            text-decoration: none;
+
+            .mzp-c-menu-item-title {
+                border-bottom: 2px solid transparent;
+            }
+        }
+
+        &:hover,
+        &:active,
+        &:focus {
+            .mzp-c-menu-item-title {
+                @include transition(border-bottom-color 100ms ease-in-out);
+                border-bottom: 2px solid $color-black;
+                color: $color-black;
+            }
+        }
+    }
+
+    &.mzp-has-icon .mzp-c-menu-item-link {
+        position: relative;
+        padding-left: $small-icon-size + $padding-lg;
+
+        &:before {
+            background-color: $color-gray-20;
+            background-repeat: no-repeat;
+            content: '';
+            height: $small-icon-size;
+            left: $padding-sm;
+            margin: 0;
+            position: absolute;
+            top: $padding-sm;
+            width: $small-icon-size;
+        }
+    }
+
+    &.mzp-has-icon .mzp-c-menu-item-link:before {
+        @include background-size($small-icon-size, $small-icon-size);
+        background-color: transparent;
+    }
+
+    &.mzp-has-icon.mzp-t-product-firefox .mzp-c-menu-item-link:before {
+        background-image: url('#{$image-path}/logos/firefox/firefox.png');
+    }
+
+    &.mzp-has-icon.mzp-t-product-beta .mzp-c-menu-item-link:before {
+        background-image: url('#{$image-path}/logos/firefox/beta.png');
+    }
+
+    &.mzp-has-icon.mzp-t-product-developer .mzp-c-menu-item-link:before {
+        background-image: url('#{$image-path}/logos/firefox/developer.png');
+    }
+
+    &.mzp-has-icon.mzp-t-product-nightly .mzp-c-menu-item-link:before {
+        background-image: url('#{$image-path}/logos/firefox/nightly.png');
+    }
+
+    &.mzp-has-icon.mzp-t-product-focus .mzp-c-menu-item-link:before {
+        background-image: url('#{$image-path}/logos/firefox/focus.png');
+    }
+
+    &.mzp-has-icon.mzp-t-product-pocket .mzp-c-menu-item-link:before {
+        @include background-size($small-icon-size, 29px);
+        background-image: url('#{$image-path}/logos/pocket/pocket.svg');
+    }
+
+    .mzp-c-menu-item-title {
+        @include text-display-xs;
+        display: inline;
+    }
+
+    .mzp-c-menu-item-desc {
+        @include text-body-sm;
+        margin: $margin-sm 0 0;
+    }
+
+    .mzp-c-menu-item-list {
+        @include text-body-sm;
+        margin: $margin-md 0;
+
+        li {
+            padding-bottom: $margin-md;
+        }
+
+        a:link,
+        a:visited {
+            color: $color-black;
+            text-decoration: none;
+        }
+
+        a:hover,
+        a:active,
+        a:focus {
+            color: $color-black;
+            text-decoration: underline;
+        }
+
+        @media #{$mq-sm} {
+            @include multi-column($count: 2, $gap: $margin-md);
+            @include multi-column-avoid-break;
+        }
+    }
+
+    &.mzp-has-icon .mzp-c-menu-item-list {
+        margin-left: $small-icon-size + $margin-lg;
+    }
+
+    @media #{$mq-md} {
+        &:hover {
+            @include transition(box-shadow .1s ease-in-out);
+            box-shadow: 0 0 0 4px $color-gray-20;
+        }
+
+        .mzp-c-menu-item-link {
+            padding: $padding-sm;
+        }
+
+        &.mzp-has-icon .mzp-c-menu-item-link {
+            padding-left: $large-icon-size + $padding-lg;
+
+            &:before {
+                height: $large-icon-size;
+                width: $large-icon-size;
+            }
+        }
+
+        &.mzp-has-icon .mzp-c-menu-item-link:before {
+            @include background-size($large-icon-size, $large-icon-size);
+            background-color: transparent;
+        }
+
+        &.mzp-has-icon.mzp-t-product-pocket .mzp-c-menu-item-link:before {
+            @include background-size($large-icon-size, 59px);
+        }
+
+        .mzp-c-menu-item-list {
+            margin: $margin-md 0 $margin-md $margin-sm;
+        }
+
+        &.mzp-has-icon .mzp-c-menu-item-list {
+            margin-left: $large-icon-size + $margin-lg;
+        }
+    }
+}
